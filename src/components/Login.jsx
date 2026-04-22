@@ -113,21 +113,39 @@ const Login = () => {
           </div>
           <p className="text-red-500">{error}</p>
           <div className="card-actions justify-center m-2">
-            <button
+            {/* <button
               className="btn btn-primary"
+              onClick={isLoginForm ? handleLogin : handleSignUp}
+            >
+              {isLoginForm ? "Login" : "Sign Up"}
+            </button> */}
+            <button
+              className="btn btn-primary w-full text-white font-semibold rounded-xl text-base tracking-wide hover:scale-[1.02] transition-all duration-200"
               onClick={isLoginForm ? handleLogin : handleSignUp}
             >
               {isLoginForm ? "Login" : "Sign Up"}
             </button>
           </div>
 
-          <p
+          {/* <p
             className="m-auto py-2 cursor-pointer"
             onClick={() => setIsLoginForm(!isLoginForm)}
           >
             {isLoginForm
               ? "New User? Signup Here"
               : "Existing User? Login Here"}
+          </p> */}
+          <div className="divider text-base-content/60 text-sm font-medium">
+            or
+          </div>
+          <p className="text-sm text-base-content/50 mt-3 text-center">
+            {isLoginForm ? "New User? " : "Existing User? "}
+            <span
+              className="text-primary font-medium cursor-pointer hover:underline"
+              onClick={() => setIsLoginForm(!isLoginForm)}
+            >
+              {isLoginForm ? "Signup Here" : "Login Here"}
+            </span>
           </p>
         </div>
       </div>
