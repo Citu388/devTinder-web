@@ -1,30 +1,34 @@
-import axios from "axios"
-import { BASE_URL } from "../utils/constants"
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnections } from "../utils/connectionSlice";
-
+import { Link } from "react-router-dom";
 
 const Connections = () => {
-  const connections = useSelector((store)=>store.connections);
+  const connections = useSelector((store) => store.connections);
   const dispatch = useDispatch();
-  const fetchConnections = async()=>{
-          try{
-              const res = await axios.get(BASE_URL + "/user/connections",{withCredentials:true});
-              dispatch(addConnections(res.data.data));
-          }catch(err){
-              console.log(err);
-          }
+  const fetchConnections = async () => {
+    try {
+      const res = await axios.get(BASE_URL + "/user/connections", {
+        withCredentials: true,
+      });
+      dispatch(addConnections(res.data.data));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  useEffect(()=>{
-     fetchConnections();
-  },[]);
+  useEffect(() => {
+    fetchConnections();
+  }, []);
 
-  if(!connections){return;}
+  if (!connections) {
+    return;
+  }
 
-  if(connections.length === 0){
-     return <h1>No Connections Found</h1>
+  if (connections.length === 0) {
+    return <h1>No Connections Found</h1>;
   }
   return (
     // <div className="text-center my-10">
@@ -39,7 +43,7 @@ const Connections = () => {
     //                 <div className="text-left mx-4">
     //                       <h2 className="font-bold text-xl">{firstName + " " + lastName}</h2>
     //                       { age && gender && <p>{age + ", " + gender}</p>}
-    //                       <p>{about}</p>  
+    //                       <p>{about}</p>
     //                 </div>
     //             </div>
     //          )
@@ -51,7 +55,8 @@ const Connections = () => {
         <h1 className="font-bold text-gray-400 text-4xl mb-6">Connections</h1>
         <div className="flex flex-col items-center w-full">
           {connections.map((connection) => {
-            const { firstName, lastName, photoUrl, age, gender, about, _id } = connection;
+            const { firstName, lastName, photoUrl, age, gender, about, _id } =
+              connection;
             return (
               <div
                 key={_id}
@@ -63,19 +68,26 @@ const Connections = () => {
                   src={photoUrl}
                 />
                 <div className="text-center mt-4">
-                  <h2 className="font-bold text-xl text-gray-300">{firstName + " " + lastName}</h2>
+                  <h2 className="font-bold text-xl text-gray-300">
+                    {firstName + " " + lastName}
+                  </h2>
                   {age && gender && (
-                    <p className="text-gray-300 text-sm">{age + ", " + gender}</p>
+                    <p className="text-gray-300 text-sm">
+                      {age + ", " + gender}
+                    </p>
                   )}
                   <p className="text-gray-400 mt-2 text-sm">{about}</p>
                 </div>
+                <Link to={"/chat/" + _id}>
+                  <button className="btn btn-primary">Chat</button>
+                </Link>
               </div>
             );
           })}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Connections
+export default Connections;
