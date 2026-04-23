@@ -66,39 +66,107 @@ const Chat = () => {
   };
 
   return (
-    <div className="w-3/4 mx-auto border border-gray-600 m-5 h-[70vh] flex flex-col">
-      <h1 className="p-5 border-b border-gray-600">Chat</h1>
-      <div className="flex-1 overflow-scroll p-5">
+    <div className="w-3/4 mx-auto border border-gray-700 m-5 h-[75vh] flex flex-col rounded-2xl shadow-lg bg-[#0f172a]">
+      {/* Header */}
+      <h1 className="p-4 border-b border-gray-700 text-lg font-semibold text-white">
+        Chat
+      </h1>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-700">
         {messages.map((msg, index) => {
+          const isMe = user.firstName === msg.firstName;
+
           return (
             <div
               key={index}
-              className={
-                "chat " +
-                (user.firstName === msg.firstName ? "chat-end" : "chat-start")
-              }
+              className={`flex ${isMe ? "justify-end" : "justify-start"}`}
             >
-              <div className="chat-header">
-                {`${msg.firstName}  ${msg.lastName}`}
-                <time className="text-xs opacity-50"> 2 hours ago</time>
+              <div className="max-w-[70%]">
+                {/* Name + time */}
+                <div
+                  className={`text-xs mb-1 ${
+                    isMe
+                      ? "text-right text-gray-400"
+                      : "text-left text-gray-400"
+                  }`}
+                >
+                  {msg.firstName} {msg.lastName} • 2h ago
+                </div>
+
+                {/* Message bubble */}
+                <div
+                  className={`px-4 py-2 rounded-2xl text-sm shadow-md ${
+                    isMe
+                      ? "bg-pink-500 text-white rounded-br-none"
+                      : "bg-gray-700 text-gray-200 rounded-bl-none"
+                  }`}
+                >
+                  {msg.text}
+                </div>
+
+                {/* Seen */}
+                {isMe && (
+                  <div className="text-[10px] text-gray-500 mt-1 text-right">
+                    Seen
+                  </div>
+                )}
               </div>
-              <div className="chat-bubble">{msg.text}</div>
-              <div className="chat-footer opacity-50">Seen</div>
             </div>
           );
         })}
       </div>
-      <div className="p-5 border-t border-gray-600 flex items-center gap-2">
+
+      {/* Input */}
+      <div className="p-4 border-t border-gray-700 flex items-center gap-3 bg-[#020617] rounded-b-2xl">
         <input
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          className="flex-1 border border-gray-500 text-white rounded p-2"
-        ></input>
-        <button onClick={sendMessage} className="btn btn-secondary">
+          placeholder="Type a message..."
+          className="flex-1 bg-gray-800 text-white rounded-full px-4 py-2 outline-none focus:ring-2 focus:ring-pink-500"
+        />
+        <button
+          onClick={sendMessage}
+          className="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2 rounded-full transition"
+        >
           Send
         </button>
       </div>
     </div>
+
+    // <div className="w-3/4 mx-auto border border-gray-600 m-5 h-[70vh] flex flex-col">
+    //   <h1 className="p-5 border-b border-gray-600">Chat</h1>
+    //   <div className="flex-1 overflow-scroll p-5">
+    //     {messages.map((msg, index) => {
+    //       return (
+    //         <div
+    //           key={index}
+    //           className={
+    //             "chat " +
+    //             (user.firstName === msg.firstName ? "chat-end" : "chat-start")
+    //           }
+    //         >
+    //           <div className="chat-header">
+    //             {`${msg.firstName}  ${msg.lastName}`}
+    //             <time className="text-xs opacity-50"> 2 hours ago</time>
+    //           </div>
+    //           <div className="chat-bubble">{msg.text}</div>
+    //           <div className="chat-footer opacity-50">Seen</div>
+    //         </div>
+    //       );
+    //     })}
+    //   </div>
+    //   <div className="p-5 border-t border-gray-600 flex items-center gap-2">
+    //     <input
+    //       value={newMessage}
+    //       onChange={(e) => setNewMessage(e.target.value)}
+    //       className="flex-1 border border-gray-500 text-white rounded p-2"
+    //     ></input>
+    //     <button onClick={sendMessage} className="btn btn-secondary">
+    //       Send
+    //     </button>
+    //   </div>
+    // </div>
   );
 };
 
