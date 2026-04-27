@@ -1,9 +1,12 @@
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
+
 const Login = () => {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +16,14 @@ const Login = () => {
   const [isLoginForm, setIsLoginForm] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((store) => store.user);
+
+  // If already logged in, redirect to home
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   const handleLogin = async () => {
     try {
@@ -42,11 +53,20 @@ const Login = () => {
         { firstName, lastName, emailId, password },
         { withCredentials: true },
       );
-      console.log(res);
+
       dispatch(addUser(res.data.data));
       return navigate("/profile");
     } catch (err) {
-      console.log(err.message);
+      if (err?.response?.data) {
+        // Error from backend
+        setError(err.response.data);
+      } else if (err?.request) {
+        // Request was made but no response (network/SSL/server down)
+        setError("Unable to connect to server. Please try again later.");
+      } else {
+        // Something else went wrong
+        setError("Something went wrong. Please try again.");
+      }
     }
   };
 
