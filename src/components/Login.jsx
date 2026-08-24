@@ -18,7 +18,6 @@ const Login = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
 
-  // If already logged in, redirect to home
   useEffect(() => {
     if (user) {
       navigate("/");
@@ -29,15 +28,9 @@ const Login = () => {
     try {
       const res = await axios.post(
         BASE_URL + "/login",
-        {
-          emailId,
-          password,
-        },
-        {
-          withCredentials: true,
-        },
+        { emailId, password },
+        { withCredentials: true },
       );
-
       dispatch(addUser(res.data));
       return navigate("/");
     } catch (err) {
@@ -53,115 +46,111 @@ const Login = () => {
         { firstName, lastName, emailId, password },
         { withCredentials: true },
       );
-
       dispatch(addUser(res.data.data));
       return navigate("/profile");
     } catch (err) {
       if (err?.response?.data) {
-        // Error from backend
         setError(err.response.data);
       } else if (err?.request) {
-        // Request was made but no response (network/SSL/server down)
         setError("Unable to connect to server. Please try again later.");
       } else {
-        // Something else went wrong
         setError("Something went wrong. Please try again.");
       }
     }
   };
 
   return (
-    <div className="flex justify-center my-10">
-      <div className="card bg-base-300 w-96 shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title justify-center">
+    <div className="min-h-screen bg-black flex flex-col">
+      {/* Hero */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 text-center py-20">
+        <h1 className="text-5xl md:text-8xl font-black tracking-tight text-[#E8316A] italic leading-none">
+          It starts with a commit.
+        </h1>
+        <p className="mt-6 text-gray-400 text-base">
+          Someone on DevTinder might just merge your PR.
+        </p>
+
+        {/* Form card */}
+        <div className="mt-12 w-full max-w-sm bg-gray-950 border border-gray-800 rounded-3xl shadow-xl p-8">
+          <h2 className="text-xl font-bold text-white text-center mb-6">
             {isLoginForm ? "Login" : "Sign Up"}
           </h2>
-          <div>
+
+          <div className="space-y-4">
             {!isLoginForm && (
               <>
-                <label className="form-control w-full max-w-xs my-2">
-                  <div className="label">
-                    <span className="label-text">First Name</span>
-                  </div>
+                <div>
+                  <label className="block text-sm text-gray-300 mb-1.5 text-left">
+                    First Name
+                  </label>
                   <input
                     type="text"
                     value={firstName}
-                    className="input input-bordered w-full max-w-xs"
                     onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8316A] focus:border-transparent"
                   />
-                </label>
+                </div>
 
-                <label className="form-control w-full max-w-xs my-2">
-                  <div className="label">
-                    <span className="label-text">Last Name</span>
-                  </div>
+                <div>
+                  <label className="block text-sm text-gray-300 mb-1.5 text-left">
+                    Last Name
+                  </label>
                   <input
                     type="text"
                     value={lastName}
-                    className="input input-bordered w-full max-w-xs"
                     onChange={(e) => setLastName(e.target.value)}
+                    className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8316A] focus:border-transparent"
                   />
-                </label>
+                </div>
               </>
             )}
 
-            <label className="form-control w-full max-w-xs my-2">
-              <div className="label">
-                <span className="label-text">Email ID</span>
-              </div>
+            <div>
+              <label className="block text-sm text-gray-300 mb-1.5 text-left">
+                Email ID
+              </label>
               <input
                 type="text"
                 value={emailId}
-                className="input input-bordered w-full max-w-xs"
-                onChange={(e) => setEmailId(e.target.value)} //Here we are binding the state variable with the UI element
-                //that is input box
+                onChange={(e) => setEmailId(e.target.value)}
+                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8316A] focus:border-transparent"
               />
-            </label>
+            </div>
 
-            <label className="form-control w-full max-w-xs my-2">
-              <div className="label">
-                <span className="label-text">Password</span>
-              </div>
+            <div>
+              <label className="block text-sm text-gray-300 mb-1.5 text-left">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
-                className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-lg bg-gray-800 border border-gray-700 text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8316A] focus:border-transparent"
               />
-            </label>
-          </div>
-          <p className="text-red-500">{error}</p>
-          <div className="card-actions justify-center m-2">
-            {/* <button
-              className="btn btn-primary"
-              onClick={isLoginForm ? handleLogin : handleSignUp}
-            >
-              {isLoginForm ? "Login" : "Sign Up"}
-            </button> */}
-            <button
-              className="btn btn-primary w-full text-white font-semibold rounded-xl text-base tracking-wide hover:scale-[1.02] transition-all duration-200"
-              onClick={isLoginForm ? handleLogin : handleSignUp}
-            >
-              {isLoginForm ? "Login" : "Sign Up"}
-            </button>
+            </div>
           </div>
 
-          {/* <p
-            className="m-auto py-2 cursor-pointer"
-            onClick={() => setIsLoginForm(!isLoginForm)}
+          {error && (
+            <p className="text-red-400 text-sm mt-4 text-center">{error}</p>
+          )}
+
+          <button
+            onClick={isLoginForm ? handleLogin : handleSignUp}
+            className="w-full mt-6 rounded-xl bg-[#E8316A] text-white font-semibold text-base py-3 tracking-wide hover:bg-[#d12a5e] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
           >
-            {isLoginForm
-              ? "New User? Signup Here"
-              : "Existing User? Login Here"}
-          </p> */}
-          <div className="divider text-base-content/60 text-sm font-medium">
-            or
+            {isLoginForm ? "Login" : "Sign Up"}
+          </button>
+
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-gray-700" />
+            <span className="text-xs text-gray-500 font-medium">or</span>
+            <div className="flex-1 h-px bg-gray-700" />
           </div>
-          <p className="text-sm text-base-content/50 mt-3 text-center">
+
+          <p className="text-sm text-gray-400 text-center">
             {isLoginForm ? "New User? " : "Existing User? "}
             <span
-              className="text-primary font-medium cursor-pointer hover:underline"
+              className="text-[#E8316A] font-medium cursor-pointer hover:underline"
               onClick={() => setIsLoginForm(!isLoginForm)}
             >
               {isLoginForm ? "Signup Here" : "Login Here"}
